@@ -3,38 +3,32 @@ import { useState } from 'react';
 import { authenticateUser } from "@/lib/authenticate";
 import { useRouter } from 'next/router';
 import { useAtom } from "jotai";
-import { favoritesAtom, searchHistoryAtom } from "@/store";
-import { getFavourites, getHistory } from "@/lib/userData";
+import { favoritesAtom as recoilFavoritesAtom, searchHistoryAtom as recoilSearchHistoryAtom } from "@/store";
 
+export default function Login(props) {
+  const [user, setUser] = useState('');
+  const [password, setPassword] = useState('');
+  const [warning, setWarning] = useState('');
+  const [favorites, setFavoritesList] = useAtom(recoilFavoritesAtom);
+  const [searchHistory, setSearchHistory] = useAtom(recoilSearchHistoryAtom);
 
-export default function Login(props){
-    const [user, setUser] = useState('');
-    const [password, setPassword] = useState('');
-    const [warning, setWarning] = useState('');
-    const [favorites, setFavouritesList] = useAtom(favoritesAtom);
-    const [searchHistory, setSearchHistory] = useAtom(searchHistoryAtom);
+  const router = useRouter();
 
-    const router = useRouter();
+  async function updateAtoms() {
+    setFavoritesList(await getFavourites());
+    setSearchHistory(await getHistory());
+  }
 
-    async function updateAtoms(){
-        setFavouritesList(await getFavourites()); 
-        setSearchHistory(await getHistory()); 
+  async function handleSubmit(e) {
+    e.preventDefault();
+    try {
+      await authenticateUser(user, password);
+      await updateAtoms();
+      router.push('/favorite');
+    } catch (err) {
+      setWarning(err.message);
     }
-    
-
-    async function handleSubmit(e) 
-    {
-        e.preventDefault();
-        try{
-            await authenticateUser(user, password);
-            await updateAtoms();
-            router.push('/favorite')
-        }
-        catch(err)
-        {
-            setWarning(err.message)
-        }
-    }
+  }
 
   return (
     <>
@@ -51,7 +45,7 @@ export default function Login(props){
           <Form.Label>Password:</Form.Label><Form.Control type="password" id="password" name="password" value={password} onChange={e => setPassword(e.target.value)} />
         </Form.Group>
 
-        { warning && ( <><br /><Alert variant="danger">{warning}</Alert></> )}
+        {warning && (<><br /><Alert variant="danger">{warning}</Alert></>)}
 
         <br />
         <Button variant="primary" className="pull-right" type="submit">Login</Button>

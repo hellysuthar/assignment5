@@ -1,6 +1,6 @@
 import { useAtom } from 'jotai';
 import { useState, useEffect } from 'react';
-import { favoritesAtom } from '@/store';
+import { favoritesAtom } from '@/atoms'; 
 import ArtWorkCard from '@/components/ArtWorkCard';
 import Col from 'react-bootstrap/Col';
 import Container from 'react-bootstrap/Container';
@@ -15,7 +15,7 @@ export default function Favorite() {
         setArtWorkList(favorites);
     }, []);
     
-    if(!favorites) return null;
+    if (!favorites) return null;
 
     return (
         <>
