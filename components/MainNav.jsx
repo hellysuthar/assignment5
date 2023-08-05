@@ -49,7 +49,7 @@ export default function MainNav() {
         <>
             <Navbar ref={navbarRef} expand="lg" className="bg-dark navbar-dark fixed-top nav-bar" expanded={isExpanded}>
                 <Container>
-                    <Navbar.Brand>Aryan Khurana</Navbar.Brand>
+                    <Navbar.Brand>Helly Suthar</Navbar.Brand>
                     <Navbar.Toggle onClick={() => setIsExpanded(!isExpanded)} aria-controls="navbarScroll" />
                     <Navbar.Collapse id="navbarScroll">
                     <Nav className="me-auto my-2 my-lg-0" style={{ maxHeight: '100px' }} navbarScroll>
